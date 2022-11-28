@@ -11,13 +11,14 @@ var foto;
 
 enviar.addEventListener('click', function () {
 
-    socket.emit('chat:msg', mensaje.value);
+    msj = mensaje.value;
+    socket.emit('chat:msg', {msj, persona, foto} );
 
 });
 
 mensaje.addEventListener('keyup', function () {
     if (persona) {
-        socket.emit('typing', persona)
+        socket.emit('typing', {msj, persona, foto})
     }
 });
 
@@ -25,11 +26,11 @@ socket.on('chat:msgBack', function(data) {
 
     var date = new Date();
     contenedor.innerHTML += `<div class="message-data">
-                                ${persona} - ${date.getDate()}/${date.getMonth()}/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}
-                                <img src="${foto}" alt="" >
+                                ${data.persona} - ${date.getDate()}/${date.getMonth()}/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}
+                                <img src="${data.foto}" alt="" >
                             </div>
                             <div class="message my-message">
-                                ${data}
+                                ${data.msj}
                             </div>`
 
 });
@@ -38,7 +39,7 @@ socket.on('typing', function(data){
 
     console.log("sadfasdasdas holaaaaa");
 	if(data){
-	  escribiendo.innerHTML = '<p><em>' + data + ' esta escribiendo un mensaje...</em></p>';
+	  escribiendo.innerHTML = '<p><em>' + data.persona + ' esta escribiendo un mensaje...</em></p>';
 	}else{
 		escribiendo.innerHTML = '';
 	}
