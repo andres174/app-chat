@@ -24,4 +24,8 @@ io.on('connection', (socket) => {
         io.sockets.emit('chat:msgBack', data)
     });
 
+    socket.on('typing', function(data){
+		socket.broadcast.emit('typing', data);
+	});
+
 });

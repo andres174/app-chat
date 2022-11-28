@@ -4,6 +4,7 @@ let mensaje = document.getElementById("mensaje");
 let enviar = document.getElementById("enviar");
 let contenedor = document.getElementById("contenedor");
 let contPer = document.getElementById("contPer");
+let escribiendo = document.getElementById("escribiendo");
 
 var persona;
 var foto;
@@ -12,6 +13,12 @@ enviar.addEventListener('click', function () {
 
     socket.emit('chat:msg', mensaje.value);
 
+});
+
+mensaje.addEventListener('keyup', function () {
+    if (persona) {
+        socket.emit('typing', persona)
+    }
 });
 
 socket.on('chat:msgBack', function(data) {
@@ -26,6 +33,16 @@ socket.on('chat:msgBack', function(data) {
                             </div>`
 
 });
+
+socket.on('typing', function(data){
+
+    console.log("sadfasdasdas holaaaaa");
+	if(data){
+	  escribiendo.innerHTML = '<p><em>' + data + ' esta escribiendo un mensaje...</em></p>';
+	}else{
+		escribiendo.innerHTML = '';
+	}
+});	
 
 function getData(event){
     foto = event.children[0].currentSrc;
